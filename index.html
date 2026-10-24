@@ -1,16 +1,42 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>ANGVEY</title>
-<style>body{margin:0;background:#09090B;color:#A1A1AA;font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh}</style>
-</head><body><p id="s">Loading ANGVEY…</p>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ANGVEY</title>
+<style>
+body{margin:0;background:#09090B;color:#A1A1AA;font-family:system-ui,sans-serif;
+display:flex;align-items:center;justify-content:center;min-height:100vh}
+.s{text-align:center}
+.spin{width:28px;height:28px;border:3px solid #27272A;border-top-color:#A78BFA;
+border-radius:50%;animation:r .8s linear infinite;margin:0 auto 1rem}
+@keyframes r{to{transform:rotate(360deg)}}
+</style>
+</head><body>
+<div class="s"><div class="spin"></div><p id="m">Loading ANGVEY…</p></div>
 <script>
-(async()=>{
+(async () => {
+  const m = document.getElementById('m');
   try {
-    const parts=['c0.txt','c1.txt','c2.txt','c3.txt','c4.txt','c5.txt','c6.txt','c7.txt','c8.txt','c9.txt','c10.txt','c11.txt','c12.txt','c13.txt'];
-    const texts=await Promise.all(parts.map(p=>fetch(p).then(r=>{if(!r.ok)throw new Error(p+' '+r.status);return r.text()})));
-    const html=texts.join('');
-    document.open();document.write(html);document.close();
-  } catch(e) {
-    document.getElementById('s').textContent='Load failed: '+e;
+    const parts = ['g0.txt','g1.txt','g2.txt','g3.txt','g4.txt','g5.txt','g6.txt','g7.txt','g8.txt','g9.txt','g10.txt','g11.txt'];
+    m.textContent = 'Fetching app…';
+    const texts = await Promise.all(parts.map(p =>
+      fetch(p).then(r => { if (!r.ok) throw new Error(p + ' ' + r.status); return r.text(); })
+    ));
+    const b64 = texts.join('');
+    m.textContent = 'Unpacking…';
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const ds = new DecompressionStream('gzip');
+    const stream = new Blob([bytes]).stream().pipeThrough(ds);
+    const html = await new Response(stream).text();
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (e) {
+    m.textContent = 'Load failed: ' + e;
+    m.style.color = '#F87171';
   }
 })();
-</script></body></html>
+</script>
+</body></html>
