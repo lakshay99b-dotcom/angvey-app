@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>ANGVEY</title></head>
 <body>
-<script src="p0.js"></script>
-<script src="p1.js"></script>
-<script src="p2.js"></script>
-<script src="p3.js"></script>
-<script src="p4.js"></script>
-<script src="p5.js"></script>
-<script src="p6.js"></script>
 <script>
-document.open();
-document.write(window.__ANGVEY_HTML);
-document.close();
+(async () => {
+  const parts = ['c0.txt','c1.txt','c2.txt','c3.txt','c4.txt','c5.txt'];
+  const texts = await Promise.all(parts.map(p => fetch(p).then(r => r.text())));
+  const html = texts.join('');
+  document.open();
+  document.write(html);
+  document.close();
+})().catch(e => { document.body.textContent = 'Load error: ' + e; });
 </script>
 </body></html>
