@@ -1,2 +1,5 @@
-# angvey-app
-ANGVEY AI platform frontend
+# ANGVEY
+
+Live frontend for ANGVEY AI platform.
+
+Open the Vercel deployment URL after deploy completes.
